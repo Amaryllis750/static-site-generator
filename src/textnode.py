@@ -1,8 +1,9 @@
 from enum import Enum
+from htmlnode import LeafNode
 
 
 class TextType(Enum):
-    PLAIN = "PLAIN"
+    TEXT = "TEXT"
     BOLD = "BOLD"
     ITALIC = "ITALIC"
     LINK = "LINK"
@@ -26,3 +27,30 @@ class TextNode:
         ):
             return True
         return False
+
+
+def textnode_to_htmlnode(textNode: TextNode)-> LeafNode:
+    if textNode.text_type not in list(TextType):
+        raise Exception("This textnode does not have a valid type")
+
+    tag, value = None, None
+    props = {}
+    
+    value = textNode.value
+    
+    if textNode.text_type == TextType.BOLD:
+        tag = "b"
+    elif textNode.text_type == TextType.ITALIC:
+        tag = "i"
+    elif textNode.text_type == TextType.IMAGE:
+        tag = "a"
+        value=None
+        props = {"href": textNode.url, "alt": textNode.value}
+    elif textNode.text_type == TextType.LINK:
+        tag = "img"
+        props = {"src": textNode.url}
+    
+    
+    return LeafNode(tag, value, props)
+
+print(textnode_to_htmlnode(TextNode("Hello", TextType.LINK, "https://google.com")).to_html())
