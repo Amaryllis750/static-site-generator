@@ -7,6 +7,7 @@ class TextType(Enum):
     BOLD = "BOLD"
     ITALIC = "ITALIC"
     LINK = "LINK"
+    CODE="CODE"
     IMAGE = "IMAGE"
 
 
@@ -43,12 +44,12 @@ def textnode_to_htmlnode(textNode: TextNode)-> LeafNode:
     elif textNode.text_type == TextType.ITALIC:
         tag = "i"
     elif textNode.text_type == TextType.IMAGE:
-        tag = "a"
-        value=None
-        props = {"href": textNode.url, "alt": textNode.value}
-    elif textNode.text_type == TextType.LINK:
         tag = "img"
-        props = {"src": textNode.url}
+        value=None
+        props = {"src": textNode.url, "alt": textNode.value}
+    elif textNode.text_type == TextType.LINK:
+        tag = "a"
+        props = {"href": textNode.url}
     
     
     return LeafNode(tag, value, props)
